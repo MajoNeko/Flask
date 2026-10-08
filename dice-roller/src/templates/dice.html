@@ -5,12 +5,62 @@
 {% block content %}
 
 <div class="centered-content">
+<h2>The dice library</h2>
+    {% if _dice %}
+        <p>
+            Look at all our beautiful dice..
+        </p>
+        <ul>
+            {% for die in _dice %}
+            <li> {{die["numberOfSides"]}} sided die </li>
+            {% endfor%}
+        </ul>
+    {% else %}
+        <p>
+            No Dice available at this time
+        </p>
+    {% endif %}
 
-    <h2>The dice library</h2>
+    <button id="add-die-btn" type="button" onclick="showNewButtonForm()">Add new die</button>
 
-    <p>
-        Look at all our beautiful dice..
-    </p>
+    <form id="add-die-form" style="display: none; margin-top: 1em;">
+        <label for="sides-input">Enter the number of sides for the new die:</label>
+        <input type="number" id="sides-input" name="numberOfSides" min="2" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        function showNewButtonForm(){
+            document.getElementById('add-die-form').style.display="block";
+            document.getElementById('add-die-btn').style.display="none";
+        };
+
+        async function addNewDie(){
+            const sides=document.getElementById('sides-input').value;
+            try{
+                const response = await fetch('api/dice', {
+                    method:'POST',
+                    headers:{'Content-type':'application/json'},
+                    body: JSON.stringify({numberOfSides: Number(sides)})
+                });
+                if(response.status>400){
+                    throw Error("Something went wrong")
+                }
+                //Optionally, reload or update the dice list here
+                location.reload();
+            }
+            catch(error)
+            {
+                alert(error.message)
+            }
+        }
+
+        document.getElementById('add-die-form').addEventListener('submit', async function(e){
+            e.preventDefault();
+            await addNewDie();
+        });
+        
+    </script>
 
 </div>
 
