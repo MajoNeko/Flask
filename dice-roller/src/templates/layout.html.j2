@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-{% block head %}
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{%block title%}{%endblock%}Dice Roller</title>
-    
-{% endblock  %}
+    {% block head %}
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{{url_for('static', filename='layout.css')}}"/>
+        <title>{%block title%}{%endblock%}Dice Roller</title>
+    {% endblock  %}
 </head>
 <body>
 <div id="header">
@@ -16,6 +15,13 @@
 <div id="content">
     {%block content%}{%endblock%}
 </div>
-<div id="footer"></div>    
+<div id="footer">
+    {% block footer %}
+        &copy; Copyright 2026 by  &nbsp;
+        {% block author %}
+            {{_author | default("YOU")}}
+        {% endblock %}
+    {% endblock %}
+</div>    
 </body>
 </html>
